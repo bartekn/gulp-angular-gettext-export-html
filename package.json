@@ -1,0 +1,36 @@
+{
+  "name": "gulp-angular-gettext-export-html",
+  "version": "0.0.1",
+  "description": "Gulp plugin for parsing angular templates with angular-gettext attributes (`translate`) and replacing contents with translated `.po` files passed as an argument.",
+  "license": "MIT",
+  "repository": "bartekn/gulp-angular-gettext-export-html",
+  "author": {
+    "name": "Bartek Nowotarski"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "gulpplugin",
+    "angular",
+    "gettext"
+  ],
+  "main": "index.js",
+  "dependencies": {
+    "through2": "~0.4.1",
+    "gulp-util": "~2.2.14",
+    "lodash": "~2.4.1",
+    "cheerio": "~0.17.0",
+    "pofile": "~0.2.8",
+    "glob": "~4.0.5"
+  },
+  "devDependencies": {
+    "gulp": "^3.6.0",
+    "mocha": "~1.17.1",
+    "chai": "~1.9.0",
+    "del": "~0.1.1"
+  }
+}
