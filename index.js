@@ -63,7 +63,6 @@ module.exports = function(poFiles) {
             }
           }
         }
-
         // Loop through all attributes which matches regex: {{'string' | translate}}
         // @example <input type="text" placeholder="{{'string' | translate}}"/>
         // @see https://regex101.com/r/oS8lJ5/1
