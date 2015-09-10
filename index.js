@@ -48,9 +48,12 @@ module.exports = function(poFiles) {
         var node = $(n);
 
         var attr = node.attr();
+
+        // Loop through all translate attributes
         if (attr.hasOwnProperty('translate') && !attr.hasOwnProperty('translate-plural')) {
           plural = node.attr('translate-plural');
           node.removeAttr('translate');
+          
           // Search for available translations
           for (var i in translations[language]) {
             var translation = translations[language][i];
@@ -60,6 +63,24 @@ module.exports = function(poFiles) {
             }
           }
         }
+
+        // Loop through all attributes which matches regex: {{'string' | translate}}
+        // @example <input type="text" placeholder="{{'string' | translate}}"/>
+        // @see https://regex101.com/r/oS8lJ5/1
+        var regex = /^{{\s?[\'\"](.*)[\'\"]\s?\|\s?translate}}$/;
+        _.forEach(node[0].attribs, function (attribute, key) {
+            var result = attribute.match(regex);
+            if (result) {
+                // Search for available translations
+                for (var i in translations[language]) {
+                    var translation = translations[language][i];
+                    if (translation.msgid === result[1]) {
+                        node.attr(key, translation.msgstr[0]);
+                        break;
+                    }
+                }
+            }
+        }); 
       });
 
       newFile.contents = new Buffer($.html());
