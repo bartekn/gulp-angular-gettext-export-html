@@ -54,14 +54,23 @@ module.exports = function(poFiles) {
           plural = node.attr('translate-plural');
           node.removeAttr('translate');
           
+
           // Search for available translations
+          var translationExist = false;
           for (var i in translations[language]) {
             var translation = translations[language][i];
             if (translation.msgid === node.text()) {
-              node.text(translation.msgstr[0]);
-              break;
+              	var translationid = translation.msgid;
+	            if(translation.msgstr[0]){
+	                translationExist = true;
+	                node.text(translation.msgstr[0]);
+	                break;
+	            }
             }
           }
+          	if(translationExist === false){
+	            node.text(translationid);
+	        }
         }
         // Loop through all attributes which matches regex: {{'string' | translate}}
         // @example <input type="text" placeholder="{{'string' | translate}}"/>
@@ -70,13 +79,23 @@ module.exports = function(poFiles) {
         _.forEach(node[0].attribs, function (attribute, key) {
             var result = attribute.match(regex);
             if (result) {
+
+            	var translationExist = false;
                 // Search for available translations
                 for (var i in translations[language]) {
                     var translation = translations[language][i];
                     if (translation.msgid === result[1]) {
-                        node.attr(key, translation.msgstr[0]);
-                        break;
+                       var translationid = translation.msgid;
+                        if(translation.msgstr[0]){
+                            var keyTranslated = key;
+                            translationExist = true;
+                            node.attr(key, translation.msgstr[0]);
+                            break;
+                        }
                     }
+                }
+                if(translationExist === false){
+                    node.attr(keyTranslated, translationid);
                 }
             }
         }); 
