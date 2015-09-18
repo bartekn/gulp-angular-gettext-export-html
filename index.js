@@ -48,18 +48,57 @@ module.exports = function(poFiles) {
         var node = $(n);
 
         var attr = node.attr();
+
+        // Loop through all translate attributes
         if (attr.hasOwnProperty('translate') && !attr.hasOwnProperty('translate-plural')) {
           plural = node.attr('translate-plural');
           node.removeAttr('translate');
+          
+
           // Search for available translations
+          var translationExist = false;
           for (var i in translations[language]) {
             var translation = translations[language][i];
             if (translation.msgid === node.text()) {
-              node.text(translation.msgstr[0]);
-              break;
+              	var translationid = translation.msgid;
+	            if(translation.msgstr[0]){
+	                translationExist = true;
+	                node.text(translation.msgstr[0]);
+	                break;
+	            }
             }
           }
+          	if(translationExist === false){
+	            node.text(translationid);
+	        }
         }
+        // Loop through all attributes which matches regex: {{'string' | translate}}
+        // @example <input type="text" placeholder="{{'string' | translate}}"/>
+        // @see https://regex101.com/r/oS8lJ5/1
+        var regex = /^{{\s?[\'\"](.*)[\'\"]\s?\|\s?translate}}$/;
+        _.forEach(node[0].attribs, function (attribute, key) {
+            var result = attribute.match(regex);
+            if (result) {
+
+            	var translationExist = false;
+                // Search for available translations
+                for (var i in translations[language]) {
+                    var translation = translations[language][i];
+                    if (translation.msgid === result[1]) {
+                       var translationid = translation.msgid;
+                        if(translation.msgstr[0]){
+                            var keyTranslated = key;
+                            translationExist = true;
+                            node.attr(key, translation.msgstr[0]);
+                            break;
+                        }
+                    }
+                }
+                if(translationExist === false){
+                    node.attr(keyTranslated, translationid);
+                }
+            }
+        }); 
       });
 
       newFile.contents = new Buffer($.html());
