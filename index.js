@@ -60,6 +60,18 @@ module.exports = function(poFiles) {
             }
           }
         }
+
+        if(attr.hasOwnProperty('placeholder')){
+          var placeholder = node.attr('placeholder');
+          // Search for available translations
+          for (var j in translations[language]) {
+            var t = translations[language][j];
+            if (t.msgid === placeholder) {
+              node.attr('placeholder', t.msgstr[0]);
+              break;
+            }
+          }
+        }
       });
 
       newFile.contents = new Buffer($.html());
