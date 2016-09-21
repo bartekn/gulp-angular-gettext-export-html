@@ -27,7 +27,7 @@ module.exports = function(poFiles) {
 
   var normalizeText = function(text){
     return text.replace(/(?:\r\n|\r|\n|\t|\\t|\\n)/g, '').trim();
-  }
+  };
 
   var getTranslation = function(language, string){
     string = normalizeText(string);
@@ -36,10 +36,6 @@ module.exports = function(poFiles) {
     for (var i in translations[language]) {
       var translation = translations[language][i];
       var normalized = normalizeText(translation.msgid);
-
-      /*if(string.indexOf('CVR: 34 04 24 25') > -1 && normalized.indexOf('CVR: 34 04 24 25') > -1){
-       console.log("'" + normalized + "'", ' == ', "'" +string + "'");
-       }*/
 
       if (normalized === string) {
         var translationid = translation.msgid;
