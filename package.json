@@ -1,6 +1,6 @@
 {
   "name": "gulp-angular-gettext-export-html",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Gulp plugin for parsing angular templates with angular-gettext attributes (`translate`) and replacing contents with translated `.po` files passed as an argument.",
   "license": "MIT",
   "repository": "bartekn/gulp-angular-gettext-export-html",
