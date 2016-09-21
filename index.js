@@ -31,9 +31,9 @@ module.exports = function(poFiles) {
       var translation = translations[language][i];
       if (translation.msgid === string) {
         var translationid = translation.msgid;
-         if(translation.msgstr[0]){
-             return translation.msgstr[0];
-         }
+        if(translation.msgstr[0]){
+          return translation.msgstr[0];
+        }
       }
     }
 
@@ -64,7 +64,7 @@ module.exports = function(poFiles) {
 
         if(n.name.toLowerCase() === "translate"){
           // Search for available translations
-          node.replaceWith(getTranslation(language, node.text()));
+          node.replaceWith(getTranslation(language, node.html()));
           return;
         }
 
@@ -75,9 +75,9 @@ module.exports = function(poFiles) {
         if (attr.hasOwnProperty('translate') && !attr.hasOwnProperty('translate-plural')) {
           node.removeAttr('translate');
 
-          node.text(getTranslation(language, node.text()));
+          node.html(getTranslation(language, node.html()));
         }else if(attr.hasOwnProperty('translate') && attr.hasOwnProperty('translate-plural')){
-          var singular = node.text();
+          var singular = node.html();
           var plural = node.attr('translate-plural');
           var count = node.attr('translate-n');
 
@@ -89,7 +89,7 @@ module.exports = function(poFiles) {
           var pluralTranslated = getTranslation(language, plural).replace('{{$count}}', '{}');
 
           var ngPluralize = '<ng-pluralize count="' + count + '" when="{\'one\': \'' + singularTranslated + '\', \'other\': \'' + pluralTranslated + '\'}"></ng-pluralize>';
-          node.text(ngPluralize);
+          node.html(ngPluralize);
         }
 
         if(attr.hasOwnProperty('placeholder')){
@@ -103,12 +103,12 @@ module.exports = function(poFiles) {
         // @see https://regex101.com/r/oS8lJ5/1
         var regex = /^{{\s?[\'\"](.*)[\'\"]\s?\|\s?translate}}$/;
         _.forEach(node[0].attribs, function (attribute, key) {
-            var result = attribute.match(regex);
-            if (result) {
-              var translated = getTranslation(language, result[1]);
-              node.attr(key, translated);
-            }
-        }); 
+          var result = attribute.match(regex);
+          if (result) {
+            var translated = getTranslation(language, result[1]);
+            node.attr(key, translated);
+          }
+        });
       });
 
       newFile.contents = new Buffer($.html());
