@@ -25,11 +25,23 @@ module.exports = function(poFiles) {
 
   var translations = _.zipObject(languages, _.pluck(parsedPoFiles, 'items'));
 
+  var normalizeText = function(text){
+    return text.replace(/(?:\r\n|\r|\n|\t|\\t|\\n)/g, '').trim();
+  }
+
   var getTranslation = function(language, string){
+    string = normalizeText(string);
+
     // Search for available translations
     for (var i in translations[language]) {
       var translation = translations[language][i];
-      if (translation.msgid === string) {
+      var normalized = normalizeText(translation.msgid);
+
+      /*if(string.indexOf('CVR: 34 04 24 25') > -1 && normalized.indexOf('CVR: 34 04 24 25') > -1){
+       console.log("'" + normalized + "'", ' == ', "'" +string + "'");
+       }*/
+
+      if (normalized === string) {
         var translationid = translation.msgid;
         if(translation.msgstr[0]){
           return translation.msgstr[0];
